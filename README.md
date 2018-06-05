@@ -1,5 +1,4 @@
 Console FB2 reader  
-0.20180604
 
 # Console FB2 reader
 

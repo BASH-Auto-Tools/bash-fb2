@@ -4,44 +4,24 @@
 #Depends: dash, sed, file, less, unzip, zcat
 
 sname="Fb2totxt"
-sversion="0.20180604"
+sversion="0.20180605"
 
 echo "$sname $sversion"
 
 tnocomp=""
-tcomp="/bin/sed"
-tdeb="sed_*.deb"
-if [ ! -f "$tcomp" ]
-then
-    tnocomp="$tnocomp $tcomp($tdeb)"
-fi
-tcomp="/usr/bin/file"
-tdeb="file_*.deb"
-if [ ! -f "$tcomp" ]
-then
-    tnocomp="$tnocomp $tcomp($tdeb)"
-fi
-tcomp="/bin/less"
-tdeb="less_*.deb"
-if [ ! -f "$tcomp" ]
-then
-    tnocomp="$tnocomp $tcomp($tdeb)"
-fi
-tcomp="/usr/bin/unzip"
-tdeb="unzip_*.deb"
-if [ ! -f "$tcomp" ]
-then
-    tnocomp="$tnocomp $tcomp($tdeb)"
-fi
-tcomp="/bin/zcat"
-tdeb="gzip_*.deb"
-if [ ! -f "$tcomp" ]
-then
-    tnocomp="$tnocomp $tcomp($tdeb)"
-fi
+tcomp="sed"
+[ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
+tcomp="file"
+[ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
+tcomp="less"
+[ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
+tcomp="unzip"
+[ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
+tcomp="zcat"
+[ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
 if [ "+$tnocomp" != "+" ]
 then
-    echo -e "Not found $tnocomp !"
+    echo "Not found:${tnocomp}!"
     echo ""
     exit 1
 fi
@@ -97,14 +77,8 @@ fi
 
 sedcmd='s/<body>/\n&\n/;s/<\/body>/\n&\n/;1,/<body>/d;/<\/body>/,$d;s/<[^>]+>//g;/^[[:space:]]*$/d'
 fcompr=$(file -b -i  "$src")
-if [ "x$fzip" = "xtrue" ]
-then
-    fcompr="application/zip; charset=binary"
-fi
-if [ "x$fgzip" = "xtrue" ]
-then
-    fcompr="application/gzip; charset=binary"
-fi
+[ "x$fzip" = "xtrue" ] && fcompr="application/zip; charset=binary"
+[ "x$fgzip" = "xtrue" ] && fcompr="application/gzip; charset=binary"
 
 if [ "x$fcompr" = "xapplication/zip; charset=binary" ]
 then
