@@ -4,9 +4,9 @@
 #Depends: dash, sed, file, less, unzip, zcat
 
 sname="Fb2totxt"
-sversion="0.20180630"
+sversion="0.20180702"
 
-echo "$sname $sversion"
+echo "$sname $sversion" >&2
 
 tnocomp=""
 tcomp="sed"
@@ -21,16 +21,15 @@ tcomp="zcat"
 [ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
 if [ "+$tnocomp" != "+" ]
 then
-    echo "Not found:${tnocomp}!"
-    echo ""
+    echo "Not found:${tnocomp}!" >&2
+    echo "" >&2
     exit 1
 fi
 
 fless="false"
 fzip="false"
-fgzip="false"
 fhlp="false"
-while getopts ":lo:gzh" opt
+while getopts ":lo:zh" opt
 do
     case $opt in
         l) fless="true"
@@ -38,8 +37,6 @@ do
         o) dst="$OPTARG"
             ;;
         h) fhlp="true"
-            ;;
-        g) fgzip="true"
             ;;
         z) fzip="true"
             ;;
@@ -58,7 +55,6 @@ then
     echo "Options:"
     echo "    -l             less (default = false)"
     echo "    -o name.txt    name text file (default = stdout)"
-    echo "    -g             force gunzip (default = false)"
     echo "    -z             force unzip (default = false)"
     echo "    -h             help"
     exit 0
@@ -66,7 +62,7 @@ fi
 
 if [ ! -f "$src" ]
 then
-    echo "Not found $src!"
+    echo "Not found $src!" >&2
     exit 1
 fi
 
@@ -95,8 +91,7 @@ then
             unzip -c "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
         fi
     fi
-elif [ "x$fcompr" = "xapplication/gzip; charset=binary" ]
-then
+else
     if [ "x$fless" = "xtrue" ]
     then
         zcat "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu" | less
@@ -106,18 +101,6 @@ then
             zcat "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu"
         else
             zcat -c "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
-        fi
-    fi
-else
-    if [ "x$fless" = "xtrue" ]
-    then
-        sed -e "$sedcmdf" "$src" | sed -e "$sedcmds" | sed -r "$sedcmdu" | less
-    else
-        if [ -z "$dst" ]
-        then
-            sed -e "$sedcmdf" "$src" | sed -e "$sedcmds" | sed -r "$sedcmdu"
-        else
-            sed -e "$sedcmdf" "$src" | sed -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
         fi
     fi
 fi
