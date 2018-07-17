@@ -71,7 +71,7 @@ then
     dst="$dst.txt"
 fi
 
-sedcmdf='s/<[A-Za-z]/\n&/g;s/<body>/\n&\n/;s/<\/body>/\n&\n/;'
+sedcmdf='s/<body>/\n&\n/;s/<\/body>/\n&\n/;'
 sedcmds='1,/<body>/d;/<\/body>/,$d;'
 sedcmdu='s/<[^>]+>//g;/^[[:space:]]*$/d'
 fcompr=$(file -b -i  "$src")

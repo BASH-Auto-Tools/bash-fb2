@@ -1,30 +1,28 @@
 .TH "FB2totxt User Manual" 0.20180717 "17 Jul 2018" "User documentation"
 
 .SH NAME
-fb2totxt
+fb2tozip
 
 .SH DESCRIPTION
-Bash-script for console FB2 reader
+Bash-script for console FB2 pack/unpack
 
 .SH SYNOPSIS
-fb2totxt [options] book.fb2
+fb2tozip [options] book.fb2
 
 .SH OPTIONS
 .TP
--l
-less (default = false)
+-d
+decompress book
 .TP
--o name.txt
-name text file (default = stdout)
-.TP
--z
-force unzip (default = false)
+-o str
+name pack/unpack file (default = [source.fb2].zip/[source].fb2)
 .TP
 -h
 help
 
 .SH EXAMPLE
- fb2totxt -l book.fb2.zip
+ fb2tozip youbook.fb2
+ fb2tozip -d youbook.fb2.zip
 
 .SH COPYRIGHT
  Copyright 2018 zvezdochiot.
@@ -32,12 +30,9 @@ help
 
 .SH SEE ALSO
  fb2encode,
- fb2tozip,
- sed,
- file,
- less,
+ fb2totxt,
  unzip,
- zcat
+ zip
 
 .SH CONTACTS
  Website: https://github.com/zvezdochiot/bash-fb2
