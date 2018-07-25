@@ -1,40 +1,35 @@
 .TH "FB2totxt User Manual" 0.20180725 "25 Jul 2018" "User documentation"
 
 .SH NAME
-fb2encode
+fb2xmlfix
 
 .SH DESCRIPTION
-Bash-script for console FB2 encode
+Bash-script for console FB2 fix
 
 .SH SYNOPSIS
-fb2encode [options] book.fb2
+fb2xmlfix [options] book.fb2
 
 .SH OPTIONS
 .TP
--c str
-dest code (default = utf-8)
-.TP
--o name.fb2
-name encode file (default = source file)
+-o str
+name fix book (default = source.fb2)
 .TP
 -h
 help
 
 .SH EXAMPLE
- fb2encode youbook.fb2
- fb2encode -c koi8-r youbook.fb2
+ fb2xmlfix youbook.fb2
+ fb2xmlfix -o youbook-fix.fb2 youbook.fb2
 
 .SH COPYRIGHT
  Copyright 2018 zvezdochiot.
  All rights reserved.
 
 .SH SEE ALSO
+ fb2encode,
  fb2totxt,
  fb2tozip,
- fb2tofix,
- grep,
- sed,
- iconv
+ xmlstarlet
 
 .SH CONTACTS
  Website: https://github.com/zvezdochiot/bash-fb2

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #fb2tozip.sh
-#Depends: dash, 7z
+#Depends: dash, zip, unzip
 
 sname="Fb2toZip"
-sversion="0.20180716"
+sversion="0.20180725"
 
 echo "$sname $sversion" >&2
 

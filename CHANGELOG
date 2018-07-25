@@ -1,6 +1,10 @@
 Console FB2 reader
 https://github.com/zvezdochiot/bash-fb2
 
+0.20180725
+
+    fb2xmlfix
+
 0.20180717
 
     fb2encode, fb2tozip
