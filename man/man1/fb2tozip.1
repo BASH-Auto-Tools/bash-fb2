@@ -1,4 +1,4 @@
-.TH "FB2totxt User Manual" 0.20180725 "25 Jul 2018" "User documentation"
+.TH "FB2totxt User Manual" 0.20180803 "3 Aug 2018" "User documentation"
 
 .SH NAME
 fb2tozip
@@ -11,8 +11,11 @@ fb2tozip [options] book.fb2
 
 .SH OPTIONS
 .TP
+-c
+force compress book
+.TP
 -d
-decompress book
+force decompress book
 .TP
 -o str
 name pack/unpack file (default = [source.fb2].zip/[source].fb2)
@@ -22,7 +25,7 @@ help
 
 .SH EXAMPLE
  fb2tozip youbook.fb2
- fb2tozip -d youbook.fb2.zip
+ fb2tozip youbook.fb2.zip
 
 .SH COPYRIGHT
  Copyright 2018 zvezdochiot.

@@ -4,11 +4,13 @@
 #Depends: dash, zip, unzip
 
 sname="Fb2toZip"
-sversion="0.20180725"
+sversion="0.20180803"
 
 echo "$sname $sversion" >&2
 
 tnocomp=""
+tcomp="file"
+[ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
 tcomp="zip"
 [ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
 tcomp="unzip"
@@ -21,10 +23,13 @@ then
 fi
 
 fhlp="false"
+fzip="false"
 fdzip="false"
-while getopts ":do:h" opt
+while getopts ":cdo:h" opt
 do
     case $opt in
+        c) fzip="true"
+            ;;
         d) fdzip="true"
             ;;
         o) tdest="$OPTARG"
@@ -44,15 +49,19 @@ then
     echo "Usage:"
     echo "$0 [options] book.fb2[.zip]"
     echo "Options:"
-    echo "    -d        decompress book"
+    echo "    -c        force compress book"
+    echo "    -d        force decompress book"
     echo "    -o str    name pack/unpack file (default = [source.fb2].zip/[source].fb2)"
     echo "    -h        help"
     exit 0
 fi
 
 tname="book.fb2"
+fcompr=$(file -b -i  "$src")
+[ "x$fzip" = "xtrue" ] && fcompr="application/xml; charset=utf-8"
+[ "x$fdzip" = "xtrue" ] && fcompr="application/zip; charset=binary"
 
-if [ "x$fdzip" = "xtrue" ]
+if [ "x$fcompr" = "xapplication/zip; charset=binary" ]
 then
     if [ "x$tdest" = "x" ]
     then

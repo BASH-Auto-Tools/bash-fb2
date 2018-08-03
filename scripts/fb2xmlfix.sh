@@ -4,7 +4,7 @@
 #Depends: dash, xmlstarlet
 
 sname="Fb2XMLFix"
-sversion="0.20180725"
+sversion="0.20180803"
 
 echo "$sname $sversion" >&2
 
@@ -19,10 +19,13 @@ then
 fi
 
 fhlp="false"
-while getopts ":o:h" opt
+fquiet="false"
+while getopts ":o:qh" opt
 do
     case $opt in
         o) dst="$OPTARG"
+            ;;
+        q) fquiet="true"
             ;;
         h) fhlp="true"
             ;;
@@ -51,7 +54,12 @@ fi
 
 if [ -f "$src" ]
 then
-    xmlstarlet fo -R -Q "$src" > "$src.verify.xml"
+    if [ "x$fquiet" = "xtrue" ]
+    then
+        xmlstarlet fo -R -Q "$src" > "$src.verify.xml"
+    else
+        xmlstarlet fo -R "$src" > "$src.verify.xml"
+    fi
     mv -fv "$src.verify.xml" "$dst"
 else
     echo "$src not fb2 file!" >&2
