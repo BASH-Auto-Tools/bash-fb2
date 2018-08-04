@@ -1,28 +1,27 @@
 .TH "FB2totxt User Manual" 0.20180804 "04 Aug 2018" "User documentation"
 
 .SH NAME
-fb2xmlfix
+fb2toinfo
 
 .SH DESCRIPTION
-Bash-script for console FB2 fix
+Bash-script for console FB2 info reader
 
 .SH SYNOPSIS
-fb2xmlfix [options] book.fb2
+fb2totxt [options] book.fb2
 
 .SH OPTIONS
 .TP
--o str
-name fix book (default = source.fb2)
+-o name.txt
+name text file (default = stdout)
 .TP
--q
-quiet
+-z
+force unzip (default = false)
 .TP
 -h
 help
 
 .SH EXAMPLE
- fb2xmlfix youbook.fb2
- fb2xmlfix -o youbook-fix.fb2 youbook.fb2
+ fb2toinfo book.fb2.zip
 
 .SH COPYRIGHT
  Copyright 2018 zvezdochiot.
@@ -30,10 +29,14 @@ help
 
 .SH SEE ALSO
  fb2encode,
- fb2toinfo,
  fb2totxt,
  fb2tozip,
- xmlstarlet
+ fb2xmlfix,
+ sed,
+ file,
+ less,
+ unzip,
+ zcat
 
 .SH CONTACTS
  Website: https://github.com/zvezdochiot/bash-fb2

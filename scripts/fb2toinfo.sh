@@ -1,9 +1,9 @@
 #!/bin/sh
 
-#fb2totxt.sh
-#Depends: dash, sed, file, less, unzip, zcat
+#fb2toinfo.sh
+#Depends: dash, sed, file, unzip, zcat
 
-sname="Fb2totxt"
+sname="Fb2toinfo"
 sversion="0.20180804"
 
 echo "$sname $sversion" >&2
@@ -12,8 +12,6 @@ tnocomp=""
 tcomp="sed"
 [ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
 tcomp="file"
-[ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
-tcomp="less"
 [ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
 tcomp="unzip"
 [ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
@@ -26,14 +24,11 @@ then
     exit 1
 fi
 
-fless="false"
 fzip="false"
 fhlp="false"
-while getopts ":lo:zh" opt
+while getopts ":o:zh" opt
 do
     case $opt in
-        l) fless="true"
-            ;;
         o) dst="$OPTARG"
             ;;
         h) fhlp="true"
@@ -53,7 +48,6 @@ then
     echo "Usage:"
     echo "$0 [options] book.fb2"
     echo "Options:"
-    echo "    -l             less (default = false)"
     echo "    -o name.txt    name text file (default = stdout)"
     echo "    -z             force unzip (default = false)"
     echo "    -h             help"
@@ -72,7 +66,7 @@ then
 fi
 
 sedcmdf='s/<body>/\n&\n/;s/<\/body>/\n&\n/;'
-sedcmds='/<body/,/<\/body>/p;'
+sedcmds='/<body/,$d;'
 sedcmdu='s/<[^>]+>//g;/^[[:space:]]*$/d'
 fcompr=$(file -b -i  "$src")
 [ "x$fzip" = "xtrue" ] && fcompr="application/zip; charset=binary"
@@ -80,27 +74,17 @@ fcompr=$(file -b -i  "$src")
 
 if [ "x$fcompr" = "xapplication/zip; charset=binary" ]
 then
-    if [ "x$fless" = "xtrue" ]
+    if [ -z "$dst" ]
     then
-        unzip -c "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu" | less
+        unzip -c "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu"
     else
-        if [ -z "$dst" ]
-        then
-            unzip -c "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu"
-        else
-            unzip -c "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
-        fi
+        unzip -c "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
     fi
 else
-    if [ "x$fless" = "xtrue" ]
+    if [ -z "$dst" ]
     then
-        zcat "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu" | less
+        zcat "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu"
     else
-        if [ -z "$dst" ]
-        then
-            zcat "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu"
-        else
-            zcat "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
-        fi
+        zcat "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
     fi
 fi
