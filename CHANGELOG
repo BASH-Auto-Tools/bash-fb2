@@ -1,6 +1,10 @@
 Console FB2 reader
 https://github.com/zvezdochiot/bash-fb2
 
+0.20180805
+
+    fb2toinfo: select only description
+
 0.20180804
 
     fb2totxt: select all body

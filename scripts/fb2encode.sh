@@ -4,7 +4,7 @@
 #Depends: dash, grep, sed, iconv
 
 sname="Fb2Encode"
-sversion="0.20180804"
+sversion="0.20180805"
 
 echo "$sname $sversion" >&2
 

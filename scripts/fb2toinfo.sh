@@ -4,7 +4,7 @@
 #Depends: dash, sed, file, unzip, zcat
 
 sname="Fb2toinfo"
-sversion="0.20180804"
+sversion="0.20180805"
 
 echo "$sname $sversion" >&2
 
@@ -66,7 +66,7 @@ then
 fi
 
 sedcmdf='s/<body>/\n&\n/;s/<\/body>/\n&\n/;'
-sedcmds='/<body/,$d;'
+sedcmds='/<description/,/<\/description>/p;'
 sedcmdu='s/<[^>]+>//g;/^[[:space:]]*$/d'
 fcompr=$(file -b -i  "$src")
 [ "x$fzip" = "xtrue" ] && fcompr="application/zip; charset=binary"
@@ -76,15 +76,15 @@ if [ "x$fcompr" = "xapplication/zip; charset=binary" ]
 then
     if [ -z "$dst" ]
     then
-        unzip -c "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu"
+        unzip -c "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu"
     else
-        unzip -c "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
+        unzip -c "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
     fi
 else
     if [ -z "$dst" ]
     then
-        zcat "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu"
+        zcat "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu"
     else
-        zcat "$src" | sed -e "$sedcmdf" | sed -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
+        zcat "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
     fi
 fi
