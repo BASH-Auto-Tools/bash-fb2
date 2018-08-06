@@ -1,10 +1,10 @@
 #!/bin/sh
 
 #fb2encode.sh
-#Depends: dash, grep, sed, iconv
+#Depends: dash, grep, sed, tr, iconv
 
 sname="Fb2Encode"
-sversion="0.20180805"
+sversion="0.20180806"
 
 echo "$sname $sversion" >&2
 
@@ -12,6 +12,8 @@ tnocomp=""
 tcomp="grep"
 [ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
 tcomp="sed"
+[ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
+tcomp="tr"
 [ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
 tcomp="iconv"
 [ ! "$(command -v $tcomp)" ] && tnocomp="$tnocomp $tcomp"
@@ -33,7 +35,7 @@ do
             ;;
         h) fhlp="true"
             ;;
-        *) echo "Unknown option -$OPTARG" >&2
+        *) echo " Unknown option -$OPTARG" >&2
             exit 1
             ;;
     esac
@@ -62,15 +64,21 @@ then
     nc=$(cat "$src" | grep -m 1 -no "<?xml " | sed 's/\:.*$//')
     if [ "x$nc" != "x" ]
     then
-        tc=$(cat "$src" | grep -m 1 -n "<?xml " | sed -e 's/>/&\n/g' | grep -m 1 -n "<?xml " | sed -e 's/^.*encoding=\"//;s/\".*$//')
+        tc=$(cat "$src" | grep -m 1 "<?xml " | sed -e 's/>/&\n/g' | grep -m 1 "<?xml " | tr \' \" | sed -e 's/^.*encoding=\"//;s/\".*$//')
         if [ "x$tc" != "x" -a "x$tc" != "x$dc" ]
         then
             echo "$tc -> $dc = $src.$dc"
             iconv -c -f "$tc" -t "$dc" "$src" > "$src.$dc"
             sed -i -e "${nc}s/$tc/$dc/;s/\x0D$//" "$src.$dc"
-            mv -fv "$src.$dc" "$dst"
+            if [ -s "$src.$dc" ]
+            then
+                mv -fv "$src.$dc" "$dst"
+            else
+                rm -fv "$src.$dc"
+                echo " $src not encode!" >&2
+            fi
         fi
     else
-        echo "$src not fb2 file!" >&2
+        echo " $src not fb2 file!" >&2
     fi
 fi

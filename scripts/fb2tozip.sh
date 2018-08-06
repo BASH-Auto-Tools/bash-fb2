@@ -4,7 +4,7 @@
 #Depends: dash, zip, unzip
 
 sname="Fb2toZip"
-sversion="0.20180805"
+sversion="0.20180806"
 
 echo "$sname $sversion" >&2
 

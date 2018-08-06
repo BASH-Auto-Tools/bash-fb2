@@ -4,7 +4,7 @@
 #Depends: dash, sed, file, unzip, zcat
 
 sname="Fb2toinfo"
-sversion="0.20180805"
+sversion="0.20180806"
 
 echo "$sname $sversion" >&2
 
