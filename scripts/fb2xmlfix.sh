@@ -4,7 +4,7 @@
 #Depends: dash, xmlstarlet
 
 sname="Fb2XMLFix"
-sversion="0.20180806"
+sversion="0.20180810"
 
 echo "$sname $sversion" >&2
 
@@ -56,11 +56,17 @@ if [ -f "$src" ]
 then
     if [ "x$fquiet" = "xtrue" ]
     then
-        xmlstarlet fo -R -Q "$src" > "$src.verify.xml"
+        xmlstarlet fo -R -Q "$src" > "verify.$$.xml"
     else
-        xmlstarlet fo -R "$src" > "$src.verify.xml"
+        xmlstarlet fo -R "$src" > "verify.$$.xml"
     fi
-    mv -fv "$src.verify.xml" "$dst"
+    if [ -s "verify.$$.xml" ]
+    then
+        mv -fv "verify.$$.xml" "$dst"
+    else
+        rm -fv "verify.$$.xml"
+        echo " $src not parse!" >&2
+    fi
 else
     echo "$src not fb2 file!" >&2
 fi

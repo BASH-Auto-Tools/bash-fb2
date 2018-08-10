@@ -1,6 +1,10 @@
 Console FB2 reader
 https://github.com/zvezdochiot/bash-fb2
 
+0.20180810
+
+    fb2xmlfix: fix error xmlstarlet
+
 0.20180806
 
     fb2encode: fix error iconv
