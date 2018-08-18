@@ -4,7 +4,7 @@
 #Depends: dash, sed, file, less, unzip, zcat
 
 sname="Fb2totxt"
-sversion="0.20180810"
+sversion="0.20180819"
 
 echo "$sname $sversion" >&2
 
@@ -76,7 +76,6 @@ sedcmds='/<body/,/<\/body>/p;'
 sedcmdu='s/<[^>]+>//g;/^[[:space:]]*$/d'
 fcompr=$(file -b -i  "$src")
 [ "x$fzip" = "xtrue" ] && fcompr="application/zip; charset=binary"
-[ "x$fgzip" = "xtrue" ] && fcompr="application/gzip; charset=binary"
 
 if [ "x$fcompr" = "xapplication/zip; charset=binary" ]
 then

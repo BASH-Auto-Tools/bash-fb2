@@ -4,7 +4,7 @@
 #Depends: dash, xmlstarlet
 
 sname="Fb2XMLFix"
-sversion="0.20180810"
+sversion="0.20180819"
 
 echo "$sname $sversion" >&2
 

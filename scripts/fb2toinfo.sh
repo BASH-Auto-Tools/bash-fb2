@@ -4,7 +4,7 @@
 #Depends: dash, sed, file, unzip, zcat
 
 sname="Fb2toinfo"
-sversion="0.20180810"
+sversion="0.20180819"
 
 echo "$sname $sversion" >&2
 
@@ -24,11 +24,17 @@ then
     exit 1
 fi
 
+fauth="false"
+fcnt="false"
 fzip="false"
 fhlp="false"
-while getopts ":o:zh" opt
+while getopts ":aco:zh" opt
 do
     case $opt in
+        a) fauth="true"
+            ;;
+        c) fcnt="true"
+            ;;
         o) dst="$OPTARG"
             ;;
         h) fhlp="true"
@@ -48,6 +54,8 @@ then
     echo "Usage:"
     echo "$0 [options] book.fb2"
     echo "Options:"
+    echo "    -a             list authors (default = false)"
+    echo "    -c             list content (default = false)"
     echo "    -o name.txt    name text file (default = stdout)"
     echo "    -z             force unzip (default = false)"
     echo "    -h             help"
@@ -67,24 +75,38 @@ fi
 
 sedcmdf='s/<body>/\n&\n/;s/<\/body>/\n&\n/;'
 sedcmds='/<description/,/<\/description>/p;'
+sedcmdc='/<title>/,/<\/title>/p;'
 sedcmdu='s/<[^>]+>//g;/^[[:space:]]*$/d'
+sedcmdua='s/<[^>]+>/ /g;/^[[:space:]]*$/d'
 fcompr=$(file -b -i  "$src")
 [ "x$fzip" = "xtrue" ] && fcompr="application/zip; charset=binary"
-[ "x$fgzip" = "xtrue" ] && fcompr="application/gzip; charset=binary"
 
 if [ "x$fcompr" = "xapplication/zip; charset=binary" ]
 then
-    if [ -z "$dst" ]
+    if [ "x$fcnt" = "xtrue" ]
     then
-        unzip -c "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu"
+        finfo=$(unzip -c "$src" | sed -n -e "$sedcmdc")
     else
-        unzip -c "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
+        finfo=$(unzip -c "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds")
     fi
 else
-    if [ -z "$dst" ]
+    if [ "x$fcnt" = "xtrue" ]
     then
-        zcat "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu"
+        finfo=$(zcat "$src" | sed -n -e "$sedcmdc")
     else
-        zcat "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds" | sed -r "$sedcmdu" > "$dst"
+        finfo=$(zcat "$src" | sed -e "$sedcmdf" | sed -n -e "$sedcmds")
     fi
+fi
+if [ "x$fauth" = "xtrue" ]
+then
+    finfo=$(echo "$finfo" | sed -n -e '/<author>/,/<\/author>/p' | sed -e 's/<author>//;s/<\/author>/ /' | sed -e :a -e '/>$/N; s/\n//; ta' | sed -e '/^ *$/d;' | sed -e 's/\(^.*\)\(<last-name>.*<\/last-name>\)/\2\1/' | sed -e 's/> *</></g')
+    finfo=$(echo "$finfo" | sed -r "$sedcmdua" | sed -e 's/^ *//g;s/ *$//g;s/  / /g')
+else
+    finfo=$(echo "$finfo" | sed -r "$sedcmdu")
+fi
+if [ -z "$dst" ]
+then
+    echo "$finfo"
+else
+    echo "$finfo" > "$dst"
 fi

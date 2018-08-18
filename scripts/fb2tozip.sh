@@ -4,7 +4,7 @@
 #Depends: dash, zip, unzip
 
 sname="Fb2toZip"
-sversion="0.20180810"
+sversion="0.20180819"
 
 echo "$sname $sversion" >&2
 
@@ -59,7 +59,6 @@ fi
 tname="book.fb2"
 fcompr=$(file -b -i  "$src")
 [ "x$fzip" = "xtrue" ] && fcompr="application/xml; charset=utf-8"
-[ "x$fdzip" = "xtrue" ] && fcompr="application/zip; charset=binary"
 
 if [ "x$fcompr" = "xapplication/zip; charset=binary" ]
 then
